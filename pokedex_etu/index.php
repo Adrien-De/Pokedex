@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
+    <?php
+     $link = mysqli_connect("localhost", "root", "", "Pokedex");
+      if(!$link){echo "Erreur : Impossible de se connecter à MySQL." . PHP_EOL;echo "Errno de débogage : " . mysqli_connect_errno() . PHP_EOL;echo "Erreur de débogage : " . mysqli_connect_error() . PHP_EOL; exit; }?>
     <meta charset="utf-8">
     <link rel="stylesheet" href="style.css">
     <title>Pokedex</title>
@@ -19,22 +22,23 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><img src="sprites/bulbasaur.png" alt="bulbasaur"></td>
-          <td>1</td>
-          <td>bulbasaur</td>
-          <td>7</td>
-          <td>69</td>
-          <td>64</td>
-        </tr>
-        <tr>
-          <td><img src="sprites/ivysaur.png" alt="bulbasaur"></td>
-          <td>2</td>
-          <td>ivysaur</td>
-          <td>10</td>
-          <td>130</td>
-          <td>1</td>
-        </tr>
+        <?php $req = "";?>
+
+        <div class="container">
+              <?php $result = $link->query("SELECT id, identifier, height, weight, base_experience FROM pokemon");
+               if ($result) {
+   //echo "SELECT a retourné ".mysqli_num_rows($result)." lignes.<br>";
+
+          while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
+            echo "<tr><th>".'<img src="sprites/'.$row['identifier'].'.png">'."</th>";
+            echo "<th>".$row['id']."</th>";
+            echo "<th>".$row['identifier']."</th>";
+            echo "<th>".$row['height']."</th>";
+            echo "<th>".$row['weight']."</th>";
+            echo "<th>".$row['base_experience']."</th></tr>";
+          }mysqli_free_result($result);}?>
+   
+        </div>      
       </tbody>
     </table>
   </body>
